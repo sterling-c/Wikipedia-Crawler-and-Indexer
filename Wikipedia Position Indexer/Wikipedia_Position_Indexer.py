@@ -13,7 +13,7 @@ def get_page_content(url):
 	except Exception as e:
 		return None
 
-def Position_Indexing(file_path):	#This function only takes the file as a parameter because the unique terms are taken later within the function
+def Frequency_Indexing(file_path):	#This function only takes the file as a parameter because the unique terms are taken later within the function
 	try:
 		_create_unverified_http_context = ssl._create_unverified_context
 	except AttributeError:
@@ -49,19 +49,20 @@ def Position_Indexing(file_path):	#This function only takes the file as a parame
 		docTokens = nltk.word_tokenize(doc_text.lower())
 		for token in docTokens:
 			pos += 1
+			if(token not in terms):
+				continue
 			if(token not in indexTable):
 				indexTable[token] = []
 			indexTable[token].append([docCounter, pos])
+		print(str(indexTable))
 	output = open('pos_index.txt', 'w', encoding = 'utf-8')
 	for term in terms:
-		indexCount = 0
-		output.write(term + ' => ')
+		output.write(term + ' => ' + '\n')
 		for index in indexTable:
 			if(term == index): 
 				for posting in indexTable[index]:
-					indexCount += 1
-					doc_index = str(posting[0])
-					output.write(doc_index)
-		output.write('\n' + 'Number of pages indexed: ' + str(indexCount) + '\n')
+					pos_index = posting 
+					output.write(str(pos_index))
+		output.write('\n')
 	f.close()
-Position_Indexing("crawled_urls.txt")
+Frequency_Indexing("crawled_urls.txt")
